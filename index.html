@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Habla - Experiencia Pro Interactiva</title>
+    <title>Habla - Agencia Digital Premium</title>
     <style>
-        /* Variables de diseño basadas en tu logo */
+        /* Variables globales basadas en tu logo */
         :root {
-            --bg-color: #0a0a0a;
-            --primary-color: #a3e635; /* El verde lima/viche de tu logo */
-            --text-color: #ffffff;
-            --accent-glow: rgba(163, 230, 53, 0.3);
+            --bg-dark: #060606;
+            --bg-card: #111111;
+            --primary-lime: #a3e635; /* Verde lima exacto del logo */
+            --text-light: #ffffff;
+            --text-muted: #888888;
+            --glow: rgba(163, 230, 53, 0.25);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         * {
@@ -18,20 +21,21 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* Cursor Personalizado Interactivo */
+        /* --- CURSOR PERSONALIZADO --- */
         #custom-cursor {
             width: 20px;
             height: 20px;
-            border: 2px solid var(--primary-color);
+            border: 2px solid var(--primary-lime);
             border-radius: 50%;
             position: fixed;
             transform: translate(-50%, -50%);
@@ -40,7 +44,7 @@
             transition: width 0.2s, height 0.2s, background-color 0.2s;
         }
 
-        /* Contenedor del fondo 3D */
+        /* --- FONDO Y OBJETOS 3D INTERACTIVOS --- */
         #canvas-container {
             position: fixed;
             top: 0;
@@ -48,272 +52,761 @@
             width: 100vw;
             height: 100vh;
             z-index: 1;
-            pointer-events: all;
+            pointer-events: none;
         }
 
-        /* Capa de interfaz de usuario por encima del 3D */
-        .ui-layer {
+        /* --- INTERFAZ Y CAPAS DE CONTENIDO --- */
+        .web-content {
             position: relative;
             z-index: 2;
-            pointer-events: none; /* Permite que el mouse interactúe con el fondo 3D */
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
-        /* Header e Interfaz */
+        /* --- NAVEGACIÓN / HEADER --- */
         header {
-            padding: 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
+            background: rgba(6, 6, 6, 0.7);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Logo replicado con código CSS exacto al de tu imagen */
-        .logo {
-            font-size: 3.5rem;
+        .logo-container {
+            font-size: 2.5rem;
             font-weight: 900;
-            color: var(--primary-color);
+            color: var(--primary-lime);
             letter-spacing: -2px;
             text-transform: lowercase;
-            text-shadow: 0 0 20px var(--accent-glow);
-            pointer-events: auto;
+            text-shadow: 0 0 15px var(--glow);
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: var(--transition);
+        }
+        .logo-container:hover {
+            transform: scale(1.03);
+            text-shadow: 0 0 25px var(--primary-lime);
         }
 
-        .logo:hover {
-            transform: scale(1.05);
-            text-shadow: 0 0 35px var(--primary-color);
-        }
-
-        .nav-links {
+        nav {
             display: flex;
-            gap: 30px;
-            pointer-events: auto;
+            gap: 25px;
         }
 
-        .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
+        nav a {
+            color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: color 0.3s, text-shadow 0.3s;
+            letter-spacing: 1.5px;
+            transition: var(--transition);
         }
 
-        .nav-links a:hover {
-            color: var(--primary-color);
-            text-shadow: 0 0 10px var(--accent-glow);
+        nav a:hover {
+            color: var(--primary-lime);
+            text-shadow: 0 0 10px var(--glow);
         }
 
-        /* Contenido Principal (Hero Section) */
-        main {
-            padding: 0 10% 10% 10%;
-            max-width: 600px;
+        /* --- SECCIÓN HERO --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 8%;
+            max-width: 750px;
         }
 
-        h1 {
-            font-size: 4rem;
+        .hero h1 {
+            font-size: 4.5rem;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 20px;
-            letter-spacing: -1px;
+            margin-bottom: 25px;
+            letter-spacing: -2px;
         }
 
-        h1 span {
-            color: var(--primary-color);
-            text-shadow: 0 0 15px var(--accent-glow);
+        .hero h1 span {
+            color: var(--primary-lime);
+            text-shadow: 0 0 20px var(--glow);
         }
 
-        p {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.6);
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
             line-height: 1.6;
             margin-bottom: 40px;
         }
 
-        /* Botón Pro con interacción */
-        .cta-btn {
+        .btn-premium {
             display: inline-block;
-            padding: 15px 35px;
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
+            padding: 16px 40px;
+            background: transparent;
+            color: var(--primary-lime);
+            border: 2px solid var(--primary-lime);
             border-radius: 4px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 2px;
             text-decoration: none;
-            pointer-events: auto;
-            box-shadow: 0 0 15px var(--accent-glow);
-            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--glow);
+            transition: var(--transition);
+            align-self: flex-start;
         }
 
-        .cta-btn:hover {
-            background-color: var(--primary-color);
-            color: var(--bg-color);
-            box-shadow: 0 0 30px var(--primary-color);
+        .btn-premium:hover {
+            background: var(--primary-lime);
+            color: var(--bg-dark);
+            box-shadow: 0 0 30px var(--primary-lime);
             transform: translateY(-3px);
         }
 
-        /* Cambios en el cursor al pasar por elementos clickeables */
-        .interactive-hover:hover ~ #custom-cursor {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(163, 230, 53, 0.1);
+        /* --- SECCIONES COMUNES --- */
+        section {
+            padding: 120px 8% 60px 8%;
+            width: 100%;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+            text-align: center;
+            letter-spacing: -1px;
+        }
+
+        .section-title span {
+            color: var(--primary-lime);
+            text-shadow: 0 0 15px var(--glow);
+        }
+
+        /* --- PROYECTOS TERMINADOS (PORTAFOLIO) --- */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-lime);
+            box-shadow: 0 10px 30px rgba(163, 230, 53, 0.05);
+        }
+
+        /* Reemplazo visual premium simulando el preview del proyecto */
+        .project-image-placeholder {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #161616 0%, #222222 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .project-card:hover .project-image-placeholder {
+            color: rgba(163, 230, 53, 0.05);
+        }
+
+        .project-tag {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--primary-lime);
+            color: var(--primary-lime);
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .project-info {
+            padding: 25px;
+        }
+
+        .project-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .project-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* --- PLANES Y PRECIOS --- */
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .price-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .price-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-lime);
+            box-shadow: 0 10px 30px rgba(163, 230, 53, 0.1);
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary-lime);
+            box-shadow: 0 0 20px var(--glow);
+        }
+
+        .badge {
+            position: absolute;
+            top: -13px;
+            right: 20px;
+            background: var(--primary-lime);
+            color: var(--bg-dark);
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .price-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .price-card .cost {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: var(--primary-lime);
+            margin-bottom: 25px;
+        }
+
+        .price-card .cost span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .price-card ul {
+            list-style: none;
+            margin-bottom: 35px;
+            flex-grow: 1;
+        }
+
+        .price-card ul li {
+            margin-bottom: 12px;
+            color: #ccc;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .price-card ul li::before {
+            content: "✓";
+            color: var(--primary-lime);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .btn-card {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-light);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .price-card:hover .btn-card {
+            background: var(--primary-lime);
+            color: var(--bg-dark);
+            border-color: var(--primary-lime);
+        }
+
+        /* --- RESEÑAS / TESTIMONIOS --- */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 35px;
+            position: relative;
+        }
+
+        .review-text {
+            color: #dddddd;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar-placeholder {
+            width: 45px;
+            height: 45px;
+            background: #222;
+            border: 1px solid var(--primary-lime);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-lime);
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .author-info p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* --- CONTACTO --- */
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            border-radius: 4px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-lime);
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        footer {
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        /* Ajustes globales de interacción del cursor */
+        .interactive:hover ~ #custom-cursor {
+            width: 45px;
+            height: 45px;
+            background: rgba(163, 230, 53, 0.15);
         }
     </style>
+    <!-- Importamos la librería tridimensional Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
     <div id="custom-cursor"></div>
-
     <div id="canvas-container"></div>
 
-    <div class="ui-layer">
+    <div class="web-content">
+        <!-- HEADER -->
         <header>
-            <div class="logo interactive-hover">habla</div>
-            <nav class="nav-links">
-                <a href="#" class="interactive-hover">Inicio</a>
-                <a href="#" class="interactive-hover">Proyectos</a>
-                <a href="#" class="interactive-hover">Contacto</a>
+            <div class="logo-container interactive">habla</div>
+            <nav>
+                <a href="#inicio" class="interactive">Inicio</a>
+                <a href="#proyectos" class="interactive">Proyectos</a>
+                <a href="#web" class="interactive">Planes Web</a>
+                <a href="#redes" class="interactive">Planes Redes</a>
+                <a href="#reseñas" class="interactive">Reseñas</a>
+                <a href="#contacto" class="interactive">Contacto</a>
             </nav>
         </header>
 
-        <main>
-            <h1>Llevando tu entorno al <span>Siguiente Nivel</span></h1>
-            <p>Una interfaz disruptiva diseñada para interactuar con tus movimientos. Mueve el cursor por la pantalla para distorsionar la red e interactuar con el ecosistema digital.</p>
-            <a href="#" class="cta-btn interactive-hover">Explorar Experiencia</a>
-        </main>
+        <!-- HERO SECTION -->
+        <section id="inicio" class="hero">
+            <h1>Estrategias con <span>Impacto Real</span></h1>
+            <p>Construimos plataformas interactivas de alta ingeniería y escalamos marcas mediante ecosistemas digitales inmersivos diseñados para captar y convertir audiencias.</p>
+            <a href="#proyectos" class="btn-premium interactive">Explorar Trabajo</a>
+        </section>
+
+        <!-- SECCIÓN PROYECTOS TERMINADOS -->
+        <section id="proyectos">
+            <h2 class="section-title">Proyectos <span>Terminados</span></h2>
+            <div class="portfolio-grid">
+                <div class="project-card">
+                    <div class="project-image-placeholder">HABLA<span class="project-tag">E-Commerce</span></div>
+                    <div class="project-info">
+                        <h3>Apex Marketplace</h3>
+                        <p>Plataforma de comercio electrónico de alta velocidad con pasarelas globales y gestión de stock automatizada a tiempo real.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image-placeholder">HABLA<span class="project-tag">SaaS Platform</span></div>
+                    <div class="project-info">
+                        <h3>Nova Analytics</h3>
+                        <p>Interfaz de analítica de datos en nube optimizada con paneles personalizables interactivos y renderizado en 3D.</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image-placeholder">HABLA<span class="project-tag">Corporate</span></div>
+                    <div class="project-info">
+                        <h3>Vortex Holding</h3>
+                        <p>Sitio corporativo corporativo institucional blindado a nivel SEO y con diseño UI interactivo disruptivo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PLANES WEB -->
+        <section id="web">
+            <h2 class="section-title">Planes de <span>Desarrollo Web</span></h2>
+            <div class="pricing-container">
+                <div class="price-card">
+                    <h3>Landing Page</h3>
+                    <div class="cost">$190<span>/único</span></div>
+                    <ul>
+                        <li>Diseño One-Page Ultra Pro</li>
+                        <li>Optimizado para Móviles</li>
+                        <li>Formulario de Contacto</li>
+                        <li>Integración de WhatsApp</li>
+                    </ul>
+                    <a href="#contacto" class="btn-card interactive">Seleccionar</a>
+                </div>
+                <div class="price-card featured">
+                    <div class="badge">Popular</div>
+                    <h3>Web Corporativa</h3>
+                    <div class="cost">$350<span>/único</span></div>
+                    <ul>
+                        <li>Hasta 5 secciones internas</li>
+                        <li>Panel de administración</li>
+                        <li>Optimización SEO Base</li>
+                        <li>Animaciones avanzadas 3D</li>
+                    </ul>
+                    <a href="#contacto" class="btn-card interactive">Seleccionar</a>
+                </div>
+                <div class="price-card">
+                    <h3>E-Commerce</h3>
+                    <div class="cost">$590<span>/único</span></div>
+                    <ul>
+                        <li>Tienda Online Completa</li>
+                        <li>Pasarela de Pagos</li>
+                        <li>Gestión de Stock Automatizada</li>
+                        <li>Soporte Técnico Premium</li>
+                    </ul>
+                    <a href="#contacto" class="btn-card interactive">Seleccionar</a>
+                </div>
+                <div class="price-card">
+                    <h3>A Medida</h3>
+                    <div class="cost">Cotizar<span>/pro</span></div>
+                    <ul>
+                        <li>Sistemas Web Complejos</li>
+                        <li>Aplicaciones Integradas</li>
+                        <li>Diseño de UI Exclusivo</li>
+                        <li>Garantía de Escalabilidad</li>
+                    </ul>
+                    <a href="#contacto" class="btn-card interactive">Cotizar</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PLANES REDES -->
+        <section id="redes">
+            <h2 class="section-title">Planes de <span>Redes Sociales</span></h2>
+            <div class="pricing-container">
+                <div class="price-card">
+                    <h3>Plan Crecimiento</h3>
+                    <div class="cost">$120<span>/mes</span></div>
+                    <ul>
+                        <li>8 Posts Mensuales</li>
+                        <li>Diseño Gráfico Profesional</li>
+                        <li>Copia y Hashtags Estratégicos</li>
+                        <li>Informe de Métricas Mensual</li>
+                    </ul>
+                    <a href="#contacto" class="btn-card interactive">Seleccionar</a>
+                </div>
+                <div class="price-card featured">
+                    <div class="badge">Recomendado</div>
+                    <h3>Plan Business Pro</h3>
+                    <div class="cost">$220<span>/mes</span></div>
+                    <ul>
+                        <li>12 Posts + 4 Reels Profesionales</li>
+                        <li>Edición Completa de Video</li>
+                        <li>Moderación de Comentarios</li>
+                        <li>Campañas de Anuncios Basadas</li>
+                    </ul>
+                    <a href="#contacto" class="btn-card interactive">Seleccionar</a>
+                </div>
+                <div class="price-card">
+                    <h3>Plan Escala Elite</h3>
+                    <div class="cost">$380<span>/mes</span></div>
+                    <ul>
+                        <li>Gestión Multi-Plataforma Total</li>
+                        <li>Creación Continua de Contenido</li>
+                        <li>Sesiones de Estrategia Mensual</li>
+                        <li>Monitoreo de Competencia Directa</li>
+                    </ul>
+                    <a href="#contacto" class="btn-card interactive">Seleccionar</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN RESEÑAS -->
+        <section id="reseñas">
+            <h2 class="section-title">Opiniones de <span>Nuestros Clientes</span></h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <p class="review-text">"El rediseño de nuestra web superó totalmente las expectativas. Los elementos tridimensionales le dan un toque futurista único que atrapa a nuestros clientes."</p>
+                    <div class="review-author">
+                        <div class="avatar-placeholder">AM</div>
+                        <div class="author-info">
+                            <h4>Alejandro Martínez</h4>
+                            <p>CEO, Apex Solutions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <p class="review-text">"El plan de redes sociales Business Pro duplicó nuestras conversiones en Instagram en menos de dos meses. El contenido en formato de video es impecable."</p>
+                    <div class="review-author">
+                        <div class="avatar-placeholder">CR</div>
+                        <div class="author-info">
+                            <h4>Camila Rodríguez</h4>
+                            <p>Directora de Marketing, Nova Retail</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <p class="review-text">"Un soporte impecable y un código limpio. La velocidad de carga de nuestra plataforma E-Commerce sigue siendo excelente a pesar del diseño avanzado."</p>
+                    <div class="review-author">
+                        <div class="avatar-placeholder">LG</div>
+                        <div class="author-info">
+                            <h4>Lucas Gómez</h4>
+                            <p>Founder, Vortex Tech</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CONTACTO -->
+        <section id="contacto">
+            <h2 class="section-title">Hablemos de tu <span>Proyecto</span></h2>
+            <div class="contact-content">
+                <form action="#" onsubmit="event.preventDefault(); alert('¡Gracias! Nos comunicaremos contigo a la brevedad.');">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo</label>
+                        <input type="text" id="name" required class="interactive">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" required class="interactive">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Cuéntanos sobre tu idea o plan seleccionado</label>
+                        <textarea id="message" rows="5" required class="interactive"></textarea>
+                    </div>
+                    <button type="submit" class="btn-premium interactive" style="width:100%; border-radius:4px; cursor:pointer;">Enviar Solicitud</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; 2026 habla. Todos los derechos reservados. Estrategia y Desarrollo de Nivel Pro.</p>
+        </footer>
     </div>
 
     <script>
-        // --- 1. LÓGICA DEL CURSOR PERSONALIZADO ---
+        // --- CONTROL DEL CURSOR PERSONALIZADO ---
         const cursor = document.getElementById('custom-cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
 
-        // Efecto expandir cursor en enlaces
-        const hovers = document.querySelectorAll('.interactive-hover');
-        hovers.forEach(element => {
-            element.addEventListener('mouseenter', () => {
-                cursor.style.width = '50px';
-                cursor.style.height = '50px';
-                cursor.style.backgroundColor = 'rgba(163, 230, 53, 0.2)';
+        const interactives = document.querySelectorAll('.interactive');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '45px';
+                cursor.style.height = '45px';
+                cursor.style.background = 'rgba(163, 230, 53, 0.15)';
             });
-            element.addEventListener('mouseleave', () => {
+            el.addEventListener('mouseleave', () => {
                 cursor.style.width = '20px';
                 cursor.style.height = '20px';
-                cursor.style.backgroundColor = 'transparent';
+                cursor.style.background = 'transparent';
             });
         });
 
-
-        // --- 2. LÓGICA DEL ENTORNO 3D INTERACTIVO (Three.js) ---
+        // --- ENTORNO EN 3D EXPANDIDO (Three.js) ---
         const container = document.getElementById('canvas-container');
-        
-        // Escena y Cámara
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 4;
+        
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 5;
 
-        // Renderizador
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        // Geometría del objeto 3D (Un Toroide complejo/Reticulado digital)
-        const geometry = new THREE.TorusGeometry(1.3, 0.4, 30, 100);
-        
-        // Material estilo Matriz/Holograma Verde Lima como el logo
-        const material = new THREE.MeshBasicMaterial({
+        // --- OBJETO 1: Toroide reticulado interactivo central del código anterior ---
+        const torusGeometry = new THREE.TorusGeometry(1.2, 0.35, 25, 80);
+        const torusMaterial = new THREE.MeshBasicMaterial({
             color: 0xa3e635,
-            wireframe: true, // Modo red de vectores para estilo tecnológico y pro
+            wireframe: true,
             transparent: true,
-            opacity: 0.85
+            opacity: 0.6
+        });
+        const torusMesh = new THREE.Mesh(torusGeometry, torusMaterial);
+        
+        // Posicionamiento dinámico adaptado a la pantalla derecha
+        if(window.innerWidth > 768) {
+            torusMesh.position.x = 1.7;
+        }
+        scene.add(torusMesh);
+        const originalTorusPositions = torusGeometry.attributes.position.clone();
+
+        // --- OBJETO 2: Constelación de Nodos Flotantes (Profundidad de fondo) ---
+        const particlesCount = 120;
+        const particlesGeometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 14;      // X
+            positions[i+1] = (Math.random() - 0.5) * 14;    // Y
+            positions[i+2] = (Math.random() - 0.5) * 10;    // Z profundidad
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            color: 0xa3e635,
+            size: 0.07,
+            transparent: true,
+            opacity: 0.3
         });
 
-        // Crear la malla 3D
-        const mesh = new THREE.Mesh(geometry, material);
-        // Posicionar el objeto hacia la derecha para que no tape el texto de la izquierda
-        if(window.innerWidth > 768) {
-            mesh.position.x = 1.5;
-        }
-        scene.add(mesh);
+        const particlePoints = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlePoints);
 
-        // Guardar las posiciones originales de los vértices para la interacción matemática
-        const originalPositions = geometry.attributes.position.clone();
-
-        // Variables para seguir el movimiento del mouse
+        // Variables de seguimiento del ratón
         let mouseX = 0;
         let mouseY = 0;
         let targetX = 0;
         let targetY = 0;
 
-        document.addEventListener('mousemove', (event) => {
-            // Coordenadas normalizadas del mouse (-1 a 1)
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
         });
 
-        // Bucle de Animación (Render Loop a 60 FPS)
         const clock = new THREE.Clock();
 
+        // Loop principal de animación interactiva
         function animate() {
             requestAnimationFrame(animate);
-
             const elapsedTime = clock.getElapsedTime();
 
-            // 1. Rotación automática continua (Vida propia)
-            mesh.rotation.x = elapsedTime * 0.2;
-            mesh.rotation.y = elapsedTime * 0.3;
+            // Rotación autónoma de la constelación de fondo
+            particlePoints.rotation.y = elapsedTime * 0.015;
+            particlePoints.rotation.x = elapsedTime * 0.008;
 
-            // 2. Orientación/Seguimiento suave del objeto hacia el mouse
+            // Rotación base del objeto Toroide
+            torusMesh.rotation.x = elapsedTime * 0.15;
+            torusMesh.rotation.y = elapsedTime * 0.22;
+
+            // Interpolación de movimiento según el mouse (Efecto profundidad reactivo)
             targetX += (mouseX - targetX) * 0.05;
             targetY += (mouseY - targetY) * 0.05;
-            mesh.rotation.y += targetX * 0.5;
-            mesh.rotation.x += -targetY * 0.5;
 
-            // 3. Deformación matemática interactiva de los vértices al pasar el mouse
-            const positionAttribute = geometry.attributes.position;
-            
-            for (let i = 0; i < positionAttribute.count; i++) {
-                // Obtener coordenadas originales del vértice
-                const vx = originalPositions.getX(i);
-                const vy = originalPositions.getY(i);
-                const vz = originalPositions.getZ(i);
+            particlePoints.position.x = targetX * 0.5;
+            particlePoints.position.y = targetY * 0.5;
 
-                // Crear un efecto de onda digital basado en el tiempo y la posición del mouse
-                const wave = Math.sin(vx * 2 + elapsedTime * 3) * Math.cos(vy * 2 + elapsedTime * 2) * (targetX * 0.25);
-                
-                // Aplicar la alteración al eje Z
-                positionAttribute.setZ(i, vz + wave);
+            torusMesh.rotation.y += targetX * 0.4;
+            torusMesh.rotation.x += -targetY * 0.4;
+
+            // Deformación ondulatoria matemática interactiva del Toroide central
+            const posAttribute = torusGeometry.attributes.position;
+            for (let i = 0; i < posAttribute.count; i++) {
+                const vx = originalTorusPositions.getX(i);
+                const vy = originalTorusPositions.getY(i);
+                const vz = originalTorusPositions.getZ(i);
+
+                const wave = Math.sin(vx * 2 + elapsedTime * 2.5) * Math.cos(vy * 2 + elapsedTime * 1.8) * (targetX * 0.2);
+                posAttribute.setZ(i, vz + wave);
             }
-            // Indicar a Three.js que actualice los vértices en pantalla
-            positionAttribute.needsUpdate = true;
+            posAttribute.needsUpdate = true;
 
             renderer.render(scene, camera);
         }
-
         animate();
 
-        // Adaptar al cambiar el tamaño de la ventana (Responsive)
+        // Ajuste Responsive dinámico para reestructurar las proporciones de los objetos 3D
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
 
             if(window.innerWidth <= 768) {
-                mesh.position.x = 0; // Centrar en móviles
+                torusMesh.position.x = 0;
             } else {
-                mesh.position.x = 1.5;
+                torusMesh.position.x = 1.7;
             }
         });
     </script>
